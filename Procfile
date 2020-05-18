@@ -1,1 +1,1 @@
-aqui serao os codigos que o heroku compilará
+web: npm start
