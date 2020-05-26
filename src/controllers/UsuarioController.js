@@ -2,14 +2,14 @@ const connection = require('../database/connection');
 const generateUniqueId = require('../util/generateUniqueId');
 
 module.exports = {
-    async index(request, response){
+    async get(request, response){
 
         const usuarios = await connection('usuario')
         .select('*');
         
         if (usuarios.length > 0) {
             const [count] = await connection('usuario')
-            .count();
+            .count()
 
             response.header('X-Total-Count', count['count(*)']);
         } else {
@@ -19,36 +19,42 @@ module.exports = {
         return response.json(usuarios);
     },
 
-    async create(request, response){
-        const {nome, email, senha} = request.body;
-
-        const id = generateUniqueId();
+    async post(request, response){
+        const {nome, email, senha, data_cadastro} = request.body;
+        //const id = generateUniqueId();
      
-        await connection('usuario').insert({
-            id,
+        const usuario = await connection('usuario').insert({
             nome,
             email,
             senha,
+            data_cadastro
         });
         
-        return response.json({id});
+        return response.sendStatus(200);
     },
 
-    async delete(request, response){
+    async patch(request, response) {
         const {id} = request.params;
+        const id_usuario = request.headers.authorization;
+        const usuarioBody = request.body;
 
-        const usuarios = await connection('usuario')
+        const usuarioTeste = await connection('usuario')
             .where('id', id)
-            .select('id ')
+            .select('id')
             .first()
 
-    if(usuarios.id !== id){
+        if(usuarioTeste.id !== id_usuario){
             return response.status(401).json({
-                error: 'Operation not permitted.'
+                error: 'Sem permissões'
             });
-        }  
-        await connection('usuario').where('id', id).delete();
-
-        return response.status(204).send();
-    }
+        }
+              
+        const usuario = await connection('usuario')
+            .where('id', id)
+            .update(usuarioBody)
+            .then(result => response.sendStatus(204))
+            .catch(error => {
+                response.status(412).json({msg: error.message})
+            })
+    },
 }

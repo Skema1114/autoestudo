@@ -7,12 +7,13 @@ module.exports = {
 
         const usuarios = await connection('usuario')
             .select('id')
-            .first()
-            .where('email', email) 
+            .where('email', email)
+            .andWhere('senha', senha)
+            .first();
            
         if(!usuarios){
             return response.status(400).json({
-                error: 'No ONG found with this ID'
+                error: 'Usuário não encontrado'
             });
         }
 
