@@ -1,18 +1,19 @@
 
-exports.up = function(knex) {
+exports.up = function (knex) {
   return knex.schema.createTable('resultado_dia', function (table) {
-      table.increments();
+    table.increments('id').primary();
 
-      table.integer('id_usuario').notNullable();
-      table.foreign('id_usuario').references('id').inTable('usuario');
-      
-      table.integer('dia').notNullable();
-      table.string('resultado').notNullable();
-      table.integer('qtd_nao').notNullable();
-      table.string('data_cadastro').notNullable();
+    table.integer('id_usuario').notNullable();
+    //table.foreign('id_usuario').references('id').inTable('usuario');
+
+    table.integer('dia').notNullable();
+    table.string('resultado').notNullable();
+    table.integer('qtd_nao').notNullable();
+    table.string('data_cadastro').notNullable();
+    table.string('bloq');
   });
 };
 
-exports.down = function(knex) {
+exports.down = function (knex) {
   return knex.schema.dropTable('resultado_dia');
 };

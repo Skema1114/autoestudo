@@ -1,17 +1,18 @@
 const connection = require('../database/connection');
+const moment = require('moment');
 
 module.exports = {
-    async get(request, response){
+    async get(request, response) {
         const id_usuario = request.headers.authorization;
 
         const resultado_meses = await connection('resultado_mes')
-        .select('*')
-        .where('id_usuario', id_usuario);
+            .select('*')
+            .where('id_usuario', id_usuario);
 
         if (resultado_meses.length > 0) {
             const [count] = await connection('resultado_mes')
-            .count()
-            .where('id_usuario', id_usuario);
+                .count()
+                .where('id_usuario', id_usuario);
 
             response.header('X-Total-Count', count['count(*)']);
         } else {
@@ -21,22 +22,25 @@ module.exports = {
         return response.json(resultado_meses);
     },
 
-    async post(request, response){
-        const {mes, resultado, data_cadastro} = request.body;
+    async post(request, response) {
+        const { mes, resultado } = request.body;
         const id_usuario = request.headers.authorization;
+        const data_cadastro = moment().utcOffset('-03:00').format("DD/MM/YYYY HH:mm:ss");
+        const bloq = 'nao';
 
         const [id] = await connection("resultado_mes").insert({
             id_usuario,
             mes,
             resultado,
-            data_cadastro
+            data_cadastro,
+            bloq
         });
 
-        return response.json({id});
+        return response.json({ id });
     },
 
     async patch(request, response) {
-        const {id} = request.params;
+        const { id } = request.params;
         const id_usuario = request.headers.authorization;
         const resultadoMesBody = request.body;
 
@@ -45,24 +49,24 @@ module.exports = {
             .select('id_usuario')
             .first()
 
-        if(resultadoMesTeste.id_usuario !== id_usuario){
+        if (resultadoMesTeste.id_usuario !== id_usuario) {
             return response.status(401).json({
                 error: 'Sem permissões'
             });
         }
-              
+
         const resultadoMes = await connection('resultado_mes')
             .where('id', id)
             .andWhere('id_usuario', id_usuario)
             .update(resultadoMesBody)
             .then(result => response.sendStatus(204))
             .catch(error => {
-                response.status(412).json({msg: error.message})
+                response.status(412).json({ msg: error.message })
             })
     },
 
-    async delete(request, response){
-        const {id} = request.params;
+    async delete(request, response) {
+        const { id } = request.params;
         const id_usuario = request.headers.authorization;
 
         const resultado_meses = await connection('resultado_mes')
@@ -70,7 +74,7 @@ module.exports = {
             .select('id_usuario')
             .first()
 
-    if((resultado_meses.id_usuario !== id_usuario)&&(resultado_meses.id !== id)){
+        if ((resultado_meses.id_usuario !== id_usuario) && (resultado_meses.id !== id)) {
             return response.status(401).json({
                 error: 'Sem permissões'
             });
