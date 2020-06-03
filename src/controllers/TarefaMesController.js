@@ -11,7 +11,8 @@ module.exports = {
                 'tarefa_mes.*',
                 'tarefa.nome',
             ])
-            .where('tarefa_mes.id_usuario', id_usuario);
+            .where('tarefa_mes.id_usuario', id_usuario)
+            .orderBy('mes');
 
         if (tarefa_meses.length > 0) {
             const [count] = await connection('tarefa_mes')

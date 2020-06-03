@@ -27,6 +27,7 @@ routes.post('/usuario', celebrate({
     nome: Joi.string().required(),
     email: Joi.string().required(),
     senha: Joi.string().required(),
+    bloq: Joi.string(),
   })
 }), UsuarioController.post);
 
@@ -128,6 +129,53 @@ routes.get('/tarefa_dia/checar/:id', celebrate({
   })
 }), TarefaDiaController.getTarefaDiaBloqById);
 
+routes.get('/tarefa_dia/resumo/concluido/:mes', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.number().required()
+  }).unknown(),
+  [Segments.PARAMS]: Joi.object().keys({
+    mes: Joi.number().required(),
+  })
+}), TarefaDiaController.getTarefaDiaConcluidoByMes);
+
+routes.get('/tarefa_dia/resumo/nao_concluido/:mes', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.number().required()
+  }).unknown(),
+  [Segments.PARAMS]: Joi.object().keys({
+    mes: Joi.number().required(),
+  })
+}), TarefaDiaController.getTarefaDiaNaoConcluidoByMes);
+
+routes.get('/tarefa_dia/resumo/pendente/:mes', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.number().required()
+  }).unknown(),
+  [Segments.PARAMS]: Joi.object().keys({
+    mes: Joi.number().required(),
+  })
+}), TarefaDiaController.getTarefaDiaPendenteByMes);
+
+routes.get('/tarefa_dia/resumo/total/:mes', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.number().required()
+  }).unknown(),
+  [Segments.PARAMS]: Joi.object().keys({
+    mes: Joi.number().required(),
+  })
+}), TarefaDiaController.getTarefaDiaTotalByMes);
+
+/*
+routes.get('/tarefa_dia/resumo/parcial/:mes', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.number().required()
+  }).unknown(),
+  [Segments.PARAMS]: Joi.object().keys({
+    mes: Joi.number().required(),
+  })
+}), TarefaDiaController.getTarefaDiaParcialByMes);
+*/
+
 routes.post('/tarefa_dia', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.number().required()
@@ -137,6 +185,7 @@ routes.post('/tarefa_dia', celebrate({
     dia: Joi.number().required(),
     mes: Joi.number().required(),
     status: Joi.string().required(),
+    bloq: Joi.string(),
   }),
 }), TarefaDiaController.post);
 
@@ -216,6 +265,7 @@ routes.post('/tarefa_mes', celebrate({
     mes: Joi.number().required(),
     ano: Joi.number().required(),
     qtd_nao: Joi.number().required(),
+    bloq: Joi.string(),
   })
 }), TarefaMesController.post);
 
@@ -257,6 +307,7 @@ routes.post('/resultado_dia', celebrate({
     dia: Joi.number().required(),
     resultado: Joi.string().required(),
     qtd_nao: Joi.number().required(),
+    bloq: Joi.string(),
   }),
 }), ResultadoDiaController.post);
 
@@ -297,6 +348,7 @@ routes.post('/resultado_mes', celebrate({
   [Segments.BODY]: Joi.object().keys({
     mes: Joi.number().required(),
     resultado: Joi.string().required(),
+    bloq: Joi.string(),
   }),
 }), ResultadoMesController.post);
 
