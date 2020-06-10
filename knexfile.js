@@ -7,48 +7,48 @@ module.exports = {
   development: {
     client: 'mysql',
     connection: {
-      host : process.env.DB_HOST,
-      user : process.env.DB_USER,
-      password : process.env.DB_PASSWORD,
-      database : process.env.DB_DATABASE,
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
     },
     migrations: {
       directory: './src/database/migrations'
     },
     useNullAsDefault: true,
-    timestamps : true,
-    underscored : true
+    timestamps: true,
+    underscored: true
   },
 
-/*
-  development: {
-    client: 'mysql',
-    connection: {
-      host : '127.0.0.1',
-      user : 'root',
-      password : '123456',
-      database : 'autoestudo_teste',
+  /*
+    development: {
+      client: 'mysql',
+      connection: {
+        host : '127.0.0.1',
+        user : 'root',
+        password : '123456',
+        database : 'autoestudo_teste',
+      },
+      migrations: {
+        directory: './src/database/migrations'
+      },
+      useNullAsDefault: true,
+      timestamps : true,
+      underscored : true
     },
-    migrations: {
-      directory: './src/database/migrations'
+  */
+  /*
+    development: {
+      client: 'sqlite3',
+      connection: {
+        filename: './src/database/autoEstudoDb.sqlite'
+      },
+      migrations: {
+        directory: './src/database/migrations'
+      },
+      useNullAsDefault: true,
     },
-    useNullAsDefault: true,
-    timestamps : true,
-    underscored : true
-  },
-*/
-/*
-  development: {
-    client: 'sqlite3',
-    connection: {
-      filename: './src/database/autoEstudoDb.sqlite'
-    },
-    migrations: {
-      directory: './src/database/migrations'
-    },
-    useNullAsDefault: true,
-  },
-*/  
+  */
 
   test: {
     client: 'sqlite3',
@@ -65,7 +65,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'my_db',
-      user:     'username',
+      user: 'username',
       password: 'password'
     },
     pool: {
@@ -81,7 +81,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'my_db',
-      user:     'username',
+      user: 'username',
       password: 'password'
     },
     pool: {

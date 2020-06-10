@@ -91,25 +91,27 @@ routes.get('/tarefa_dias', celebrate({
   }).unknown(),
 }), TarefaDiaController.get);
 
-routes.get('/tarefa_dias/pesquisar/:dia/:mes', celebrate({
+routes.get('/tarefa_dias/pesquisar/:dia/:mes/:ano', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.number().required()
   }).unknown(),
   [Segments.PARAMS]: Joi.object().keys({
     dia: Joi.number().required(),
     mes: Joi.number().required(),
+    ano: Joi.number().required(),
   })
-}), TarefaDiaController.getTarefaDiaByDiaMes);
+}), TarefaDiaController.getTarefaDiaByDiaMesAno);
 
-routes.get('/tarefa_dias/checar/:dia/:mes', celebrate({
+routes.get('/tarefa_dias/checar/:dia/:mes/:ano', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.number().required()
   }).unknown(),
   [Segments.PARAMS]: Joi.object().keys({
     dia: Joi.number().required(),
     mes: Joi.number().required(),
+    ano: Joi.number().required(),
   })
-}), TarefaDiaController.getTarefaDiaBloqByDiaMes);
+}), TarefaDiaController.getTarefaDiaBloqByDiaMesAno);
 
 routes.get('/tarefa_dia/pesquisar/:id', celebrate({
   [Segments.HEADERS]: Joi.object({
@@ -129,41 +131,56 @@ routes.get('/tarefa_dia/checar/:id', celebrate({
   })
 }), TarefaDiaController.getTarefaDiaBloqById);
 
-routes.get('/tarefa_dia/resumo/concluido/:mes', celebrate({
+routes.get('/tarefa_dia/resumo/concluido/:mes/:ano', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.number().required()
   }).unknown(),
   [Segments.PARAMS]: Joi.object().keys({
     mes: Joi.number().required(),
+    ano: Joi.number().required(),
   })
-}), TarefaDiaController.getTarefaDiaConcluidoByMes);
+}), TarefaDiaController.getTarefaDiaConcluidoByMesAno);
 
-routes.get('/tarefa_dia/resumo/nao_concluido/:mes', celebrate({
+routes.get('/tarefa_dia/resumo/nao_concluido/:mes/:ano', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.number().required()
   }).unknown(),
   [Segments.PARAMS]: Joi.object().keys({
     mes: Joi.number().required(),
+    ano: Joi.number().required(),
   })
-}), TarefaDiaController.getTarefaDiaNaoConcluidoByMes);
+}), TarefaDiaController.getTarefaDiaNaoConcluidoByMesAno);
 
-routes.get('/tarefa_dia/resumo/pendente/:mes', celebrate({
+routes.get('/tarefa_dia/resumo/pendente/:mes/:ano', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.number().required()
   }).unknown(),
   [Segments.PARAMS]: Joi.object().keys({
     mes: Joi.number().required(),
+    ano: Joi.number().required(),
   })
-}), TarefaDiaController.getTarefaDiaPendenteByMes);
+}), TarefaDiaController.getTarefaDiaPendenteByMesAno);
 
-routes.get('/tarefa_dia/resumo/total/:mes', celebrate({
+routes.get('/tarefa_dia/resumo/total/:mes/:ano', celebrate({
   [Segments.HEADERS]: Joi.object({
     authorization: Joi.number().required()
   }).unknown(),
   [Segments.PARAMS]: Joi.object().keys({
     mes: Joi.number().required(),
+    ano: Joi.number().required(),
   })
-}), TarefaDiaController.getTarefaDiaTotalByMes);
+}), TarefaDiaController.getTarefaDiaTotalByMesAno);
+
+routes.get('/tarefa_dia/sucesso/:dia/:mes/:ano', celebrate({
+  [Segments.HEADERS]: Joi.object({
+    authorization: Joi.number().required()
+  }).unknown(),
+  [Segments.PARAMS]: Joi.object().keys({
+    dia: Joi.number().required(),
+    mes: Joi.number().required(),
+    ano: Joi.number().required(),
+  })
+}), TarefaDiaController.getTarefaDiaSucessoByMesAno);
 
 /*
 routes.get('/tarefa_dia/resumo/parcial/:mes', celebrate({
@@ -184,6 +201,7 @@ routes.post('/tarefa_dia', celebrate({
     id_tarefa: Joi.number().required(),
     dia: Joi.number().required(),
     mes: Joi.number().required(),
+    ano: Joi.number().required(),
     status: Joi.string().required(),
     bloq: Joi.string(),
   }),

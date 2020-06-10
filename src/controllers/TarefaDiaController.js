@@ -27,7 +27,7 @@ module.exports = {
     },
 
     async post(request, response) {
-        const { id_tarefa, dia, mes, status } = request.body;
+        const { id_tarefa, dia, mes, ano, status } = request.body;
         const id_usuario = request.headers.authorization;
         const data_cadastro = moment().utcOffset('-03:00').format("DD/MM/YYYY HH:mm:ss");
         const bloq = 'nao';
@@ -37,6 +37,7 @@ module.exports = {
             id_usuario,
             dia,
             mes,
+            ano,
             status,
             data_cadastro,
             bloq
@@ -90,8 +91,8 @@ module.exports = {
         return response.status(204).send();
     },
 
-    async getTarefaDiaByDiaMes(request, response) {
-        const { dia, mes } = request.params;
+    async getTarefaDiaByDiaMesAno(request, response) {
+        const { dia, mes, ano } = request.params;
         const id_usuario = parseInt(request.headers.authorization);
 
         const tarefa_dia = await connection('tarefa_dia')
@@ -102,7 +103,8 @@ module.exports = {
             ])
             .where('tarefa_dia.id_usuario', id_usuario)
             .andWhere('tarefa_dia.dia', dia)
-            .andWhere('tarefa_dia.mes', mes);
+            .andWhere('tarefa_dia.mes', mes)
+            .andWhere('tarefa_dia.ano', ano);
 
         if (tarefa_dia.length > 0) {
             const [count] = await connection('tarefa_dia')
@@ -110,7 +112,9 @@ module.exports = {
                 .count()
                 .where('tarefa_dia.id_usuario', id_usuario)
                 .andWhere('tarefa_dia.dia', dia)
-                .andWhere('tarefa_dia.mes', mes);
+                .andWhere('tarefa_dia.mes', mes)
+                .andWhere('tarefa_dia.ano', ano);
+
 
             response.header('X-Total-Count', count['count(*)']);
 
@@ -124,8 +128,8 @@ module.exports = {
         }
     },
 
-    async getTarefaDiaBloqByDiaMes(request, response) {
-        const { dia, mes } = request.params;
+    async getTarefaDiaBloqByDiaMesAno(request, response) {
+        const { dia, mes, ano } = request.params;
         const id_usuario = parseInt(request.headers.authorization);
 
         const bloq = await connection('tarefa_dia')
@@ -134,14 +138,17 @@ module.exports = {
             ])
             .where('tarefa_dia.id_usuario', id_usuario)
             .andWhere('tarefa_dia.dia', dia)
-            .andWhere('tarefa_dia.mes', mes);
+            .andWhere('tarefa_dia.mes', mes)
+            .andWhere('tarefa_dia.ano', ano);
 
         if (bloq.length > 0) {
             const [count] = await connection('tarefa_dia')
                 .count()
                 .where('tarefa_dia.id_usuario', id_usuario)
                 .andWhere('tarefa_dia.dia', dia)
-                .andWhere('tarefa_dia.mes', mes);
+                .andWhere('tarefa_dia.mes', mes)
+                .andWhere('tarefa_dia.ano', ano);
+
 
             response.header('X-Total-Count', count['count(*)']);
 
@@ -216,22 +223,24 @@ module.exports = {
         }
     },
 
-    async getTarefaDiaConcluidoByMes(request, response) {
-        const { mes } = request.params;
+    async getTarefaDiaConcluidoByMesAno(request, response) {
+        const { mes, ano } = request.params;
         const id_usuario = parseInt(request.headers.authorization);
 
         const [concluido] = await connection('tarefa_dia')
             .count()
             .where('status', 'sim')
             .andWhere('id_usuario', id_usuario)
-            .andWhere('mes', mes);
+            .andWhere('mes', mes)
+            .andWhere('ano', ano);
 
         if ([concluido].length > 0) {
             const [count] = await connection('tarefa_dia')
                 .count()
                 .where('status', 'sim')
                 .andWhere('id_usuario', id_usuario)
-                .andWhere('mes', mes);
+                .andWhere('mes', mes)
+                .andWhere('ano', ano);
 
             response.header('X-Total-Count', count['count(*)']);
 
@@ -249,22 +258,24 @@ module.exports = {
         }
     },
 
-    async getTarefaDiaNaoConcluidoByMes(request, response) {
-        const { mes } = request.params;
+    async getTarefaDiaNaoConcluidoByMesAno(request, response) {
+        const { mes, ano } = request.params;
         const id_usuario = parseInt(request.headers.authorization);
 
         const [naoConcluido] = await connection('tarefa_dia')
             .count()
             .where('status', 'nao')
             .andWhere('id_usuario', id_usuario)
-            .andWhere('mes', mes);
+            .andWhere('mes', mes)
+            .andWhere('ano', ano);
 
         if ([naoConcluido].length > 0) {
             const [count] = await connection('tarefa_dia')
                 .count()
                 .where('status', 'nao')
                 .andWhere('id_usuario', id_usuario)
-                .andWhere('mes', mes);
+                .andWhere('mes', mes)
+                .andWhere('ano', ano);
 
             response.header('X-Total-Count', count['count(*)']);
 
@@ -282,22 +293,24 @@ module.exports = {
         }
     },
 
-    async getTarefaDiaPendenteByMes(request, response) {
-        const { mes } = request.params;
+    async getTarefaDiaPendenteByMesAno(request, response) {
+        const { mes, ano } = request.params;
         const id_usuario = parseInt(request.headers.authorization);
 
         const [pendente] = await connection('tarefa_dia')
             .count()
             .where('status', 'pendente')
             .andWhere('id_usuario', id_usuario)
-            .andWhere('mes', mes);
+            .andWhere('mes', mes)
+            .andWhere('ano', ano);
 
         if ([pendente].length > 0) {
             const [count] = await connection('tarefa_dia')
                 .count()
                 .where('status', 'pendente')
                 .andWhere('id_usuario', id_usuario)
-                .andWhere('mes', mes);
+                .andWhere('mes', mes)
+                .andWhere('ano', ano);
 
             response.header('X-Total-Count', count['count(*)']);
 
@@ -315,20 +328,22 @@ module.exports = {
         }
     },
 
-    async getTarefaDiaTotalByMes(request, response) {
-        const { mes } = request.params;
+    async getTarefaDiaTotalByMesAno(request, response) {
+        const { mes, ano } = request.params;
         const id_usuario = parseInt(request.headers.authorization);
 
         const [total] = await connection('tarefa_dia')
             .count()
             .where('id_usuario', id_usuario)
-            .andWhere('mes', mes);
+            .andWhere('mes', mes)
+            .andWhere('ano', ano);
 
         if ([total].length > 0) {
             const [count] = await connection('tarefa_dia')
                 .count()
                 .where('id_usuario', id_usuario)
-                .andWhere('mes', mes);
+                .andWhere('mes', mes)
+                .andWhere('ano', ano);
 
             response.header('X-Total-Count', count['count(*)']);
 
@@ -345,55 +360,110 @@ module.exports = {
             });
         }
     },
-/*
-    async getTarefaDiaParcialByMes(request, response) {
-        const { mes } = request.params;
-        const id_usuario = parseInt(request.headers.authorization);
-        
-        var agora = moment().utcOffset('-03:00');
-        var finalMes = moment().utcOffset('-03:00').endOf('month').set({
-            'hour': agora.get('hour'),
-            'minute': agora.get('minute'),
-            'second': agora.get('second'),
-            'millisecond': agora.get('millisecond')
-        });
-        
-        const ultimoDia = finalMes.format('D');
-
-        const qtdTarefas = await connection('tarefa_dia')
-            .select('id_tarefa')
-            .where('id_usuario', id_usuario)
-            .andWhere('mes', mes)
-            .andWhere('dia', ultimoDia)
-            .groupBy('id_tarefa')
-
-        const [parcial] = await connection('tarefa_dia')
-            .count()
-            .where('id_usuario', id_usuario)
-            .andWhere('mes', mes);
-
-        if ([parcial].length > 0) {
-            const [count] = await connection('tarefa_dia')
+    /*
+        async getTarefaDiaParcialByMes(request, response) {
+            const { mes } = request.params;
+            const id_usuario = parseInt(request.headers.authorization);
+            
+            var agora = moment().utcOffset('-03:00');
+            var finalMes = moment().utcOffset('-03:00').endOf('month').set({
+                'hour': agora.get('hour'),
+                'minute': agora.get('minute'),
+                'second': agora.get('second'),
+                'millisecond': agora.get('millisecond')
+            });
+            
+            const ultimoDia = finalMes.format('D');
+    
+            const qtdTarefas = await connection('tarefa_dia')
+                .select('id_tarefa')
+                .where('id_usuario', id_usuario)
+                .andWhere('mes', mes)
+                .andWhere('dia', ultimoDia)
+                .groupBy('id_tarefa')
+    
+            const [parcial] = await connection('tarefa_dia')
                 .count()
                 .where('id_usuario', id_usuario)
                 .andWhere('mes', mes);
-
-            response.header('X-Total-Count', count['count(*)']);
-
-            const qtdTarefasFinal = qtdTarefas['count(*)'];
-            const parcialFinal = parcial['count(*)'];
-            var resultadoParcialFinal;
-            if (qtdTarefasFinal > 0){
-                resultadoParcialFinal = (parcialFinal / qtdTarefasFinal);
+    
+            if ([parcial].length > 0) {
+                const [count] = await connection('tarefa_dia')
+                    .count()
+                    .where('id_usuario', id_usuario)
+                    .andWhere('mes', mes);
+    
+                response.header('X-Total-Count', count['count(*)']);
+    
+                const qtdTarefasFinal = qtdTarefas['count(*)'];
+                const parcialFinal = parcial['count(*)'];
+                var resultadoParcialFinal;
+                if (qtdTarefasFinal > 0){
+                    resultadoParcialFinal = (parcialFinal / qtdTarefasFinal);
+                }
+    
+                return response.json(qtdTarefas);
+            } else {
+                response.header('X-Total-Count', 0);
+    
+                return response.status(401).json({
+                    error: 'Sem permissão'
+                });
             }
+        },*/
 
-            return response.json(qtdTarefas);
+    async getTarefaDiaSucessoByMesAno(request, response) {
+        const { dia, mes, ano } = request.params;
+        const id_usuario = parseInt(request.headers.authorization);
+        var qtdTarefasNoDia = 0;
+        var qtdSimTarefasNoDia = 0;
+        var qtdNaoTarefasNoDia = 0;
+        var qtdNaoInformada = 0;
+
+        const bloq = await connection('tarefa_dia')
+            .select('*')
+            .where('id_usuario', id_usuario)
+            .andWhere('dia', dia)
+            .andWhere('mes', mes)
+            .andWhere('ano', ano);
+
+        if (bloq[0].bloq === 'sim') {
+            const tarefasNoDia = await connection('tarefa_dia')
+                .count()
+                .where('id_usuario', id_usuario)
+                .andWhere('dia', dia)
+                .andWhere('mes', mes)
+                .andWhere('ano', ano);
+
+            const simTarefasNoDia = await connection('tarefa_dia')
+                .count()
+                .where('id_usuario', id_usuario)
+                .andWhere('status', 'sim')
+                .andWhere('dia', dia)
+                .andWhere('mes', mes)
+                .andWhere('ano', ano);
+
+            const qtd_nao = await connection('tarefa_mes')
+                .select([
+                    'qtd_nao',
+                ])
+                .where('id_usuario', id_usuario)
+                .andWhere('mes', mes)
+                .andWhere('ano', ano);
+
+            qtdTarefasNoDia = tarefasNoDia[0]['count(*)'];
+            qtdSimTarefasNoDia = simTarefasNoDia[0]['count(*)'];
+            qtdNaoTarefasNoDia = qtdTarefasNoDia - qtdSimTarefasNoDia;
+            qtdNaoInformada = qtd_nao[0].qtd_nao;
+
+            if (qtdNaoTarefasNoDia > qtdNaoInformada) {
+                return response.json({ message: 'fracasso' });
+            } else if (qtdNaoTarefasNoDia <= qtdNaoInformada) {
+                return response.json({ message: 'sucesso' });
+
+            }
         } else {
-            response.header('X-Total-Count', 0);
-
-            return response.status(401).json({
-                error: 'Sem permissão'
-            });
+            return response.json({ message: 'aguardando' });
         }
-    },*/
+    },
 };

@@ -11,6 +11,7 @@ exports.up = function (knex) {
 
     table.integer('dia').notNullable();
     table.integer('mes').notNullable();
+    table.integer('ano').notNullable();
     table.string('status').notNullable();
     table.string('data_cadastro').notNullable();
     table.string('bloq');
